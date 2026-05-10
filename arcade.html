@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MEGA ARCADE — Play Free Games Online</title>
+<link href="https://fonts.googleapis.com/css2?family=Bangers&family=Nunito:wght@400;700;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0a1a;
+    --card: #12122a;
+    --accent1: #ff3cac;
+    --accent2: #ffde00;
+    --accent3: #00f5ff;
+    --accent4: #7b2fff;
+    --green: #0fff50;
+    --text: #ffffff;
+    --sub: #aaaacc;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Nunito', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Animated starfield background */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      radial-gradient(1px 1px at 10% 20%, rgba(255,255,255,0.4) 0%, transparent 100%),
+      radial-gradient(1px 1px at 30% 60%, rgba(255,255,255,0.3) 0%, transparent 100%),
+      radial-gradient(1px 1px at 50% 40%, rgba(255,255,255,0.5) 0%, transparent 100%),
+      radial-gradient(1px 1px at 70% 80%, rgba(255,255,255,0.2) 0%, transparent 100%),
+      radial-gradient(1px 1px at 90% 15%, rgba(255,255,255,0.4) 0%, transparent 100%),
+      radial-gradient(1px 1px at 15% 75%, rgba(255,255,255,0.3) 0%, transparent 100%),
+      radial-gradient(1px 1px at 45% 90%, rgba(255,255,255,0.4) 0%, transparent 100%),
+      radial-gradient(1px 1px at 80% 50%, rgba(255,255,255,0.3) 0%, transparent 100%),
+      radial-gradient(2px 2px at 25% 35%, rgba(0,245,255,0.3) 0%, transparent 100%),
+      radial-gradient(2px 2px at 60% 70%, rgba(255,60,172,0.3) 0%, transparent 100%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* HEADER */
+  header {
+    position: relative;
+    z-index: 10;
+    text-align: center;
+    padding: 40px 20px 20px;
+    background: linear-gradient(180deg, rgba(123,47,255,0.15) 0%, transparent 100%);
+    border-bottom: 1px solid rgba(0,245,255,0.1);
+  }
+
+  .logo {
+    font-family: 'Bangers', cursive;
+    font-size: clamp(52px, 10vw, 100px);
+    letter-spacing: 6px;
+    background: linear-gradient(135deg, var(--accent2) 0%, var(--accent1) 40%, var(--accent3) 80%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-shadow: none;
+    line-height: 1;
+    animation: flicker 4s ease-in-out infinite;
+    position: relative;
+    display: inline-block;
+  }
+
+  @keyframes flicker {
+    0%, 95%, 100% { opacity: 1; }
+    96% { opacity: 0.8; }
+    97% { opacity: 1; }
+    98% { opacity: 0.6; }
+    99% { opacity: 1; }
+  }
+
+  .logo-sub {
+    font-family: 'Bangers', cursive;
+    font-size: clamp(14px, 3vw, 22px);
+    letter-spacing: 8px;
+    color: var(--accent3);
+    margin-top: -8px;
+    display: block;
+    text-transform: uppercase;
+  }
+
+  .coin-count {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255,222,0,0.1);
+    border: 2px solid var(--accent2);
+    border-radius: 50px;
+    padding: 6px 20px;
+    font-weight: 900;
+    font-size: 18px;
+    color: var(--accent2);
+    margin-top: 16px;
+    animation: pulse-gold 2s ease-in-out infinite;
+  }
+
+  @keyframes pulse-gold {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(255,222,0,0.4); }
+    50% { box-shadow: 0 0 0 8px rgba(255,222,0,0); }
+  }
+
+  /* SEARCH & FILTER */
+  .controls {
+    position: relative;
+    z-index: 10;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    padding: 24px 40px;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .search-box {
+    position: relative;
+    flex: 1;
+    max-width: 400px;
+  }
+
+  .search-box input {
+    width: 100%;
+    background: rgba(255,255,255,0.06);
+    border: 2px solid rgba(0,245,255,0.3);
+    border-radius: 50px;
+    padding: 12px 20px 12px 48px;
+    color: #fff;
+    font-family: 'Nunito', sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    outline: none;
+    transition: border-color 0.3s, box-shadow 0.3s;
+  }
+
+  .search-box input:focus {
+    border-color: var(--accent3);
+    box-shadow: 0 0 20px rgba(0,245,255,0.2);
+  }
+
+  .search-box input::placeholder { color: var(--sub); }
+
+  .search-icon {
+    position: absolute;
+    left: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 20px;
+  }
+
+  .filter-btns {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: center;
+  }
+
+  .filter-btn {
+    background: rgba(255,255,255,0.05);
+    border: 2px solid rgba(255,255,255,0.15);
+    border-radius: 50px;
+    padding: 8px 18px;
+    color: var(--sub);
+    font-family: 'Nunito', sans-serif;
+    font-weight: 700;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.25s;
+  }
+
+  .filter-btn:hover, .filter-btn.active {
+    color: #fff;
+    border-color: var(--accent1);
+    background: rgba(255,60,172,0.15);
+    box-shadow: 0 0 12px rgba(255,60,172,0.3);
+  }
+
+  /* GAME COUNT BANNER */
+  .game-count-banner {
+    position: relative;
+    z-index: 10;
+    text-align: center;
+    padding: 0 40px 16px;
+    font-weight: 700;
+    color: var(--sub);
+    font-size: 15px;
+  }
+
+  .game-count-banner span {
+    color: var(--accent2);
+    font-size: 20px;
+    font-weight: 900;
+  }
+
+  /* GRID */
+  .games-grid {
+    position: relative;
+    z-index: 10;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 20px;
+    padding: 0 32px 60px;
+    max-width: 1600px;
+    margin: 0 auto;
+  }
+
+  /* GAME CARD */
+  .game-card {
+    background: var(--card);
+    border-radius: 18px;
+    overflow: hidden;
+    border: 2px solid rgba(255,255,255,0.06);
+    cursor: pointer;
+    transition: transform 0.25s cubic-bezier(.34,1.56,.64,1), box-shadow 0.25s, border-color 0.25s;
+    animation: fadeInUp 0.4s ease both;
+    text-decoration: none;
+    display: block;
+    position: relative;
+  }
+
+  .game-card:hover {
+    transform: translateY(-8px) scale(1.03);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.5), 0 0 30px var(--card-glow, rgba(255,60,172,0.3));
+    border-color: var(--card-border, rgba(255,60,172,0.5));
+  }
+
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .card-thumb {
+    width: 100%;
+    aspect-ratio: 4/3;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 64px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .card-thumb::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, transparent 40%, rgba(0,0,0,0.6) 100%);
+  }
+
+  .badge {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: var(--accent1);
+    color: #fff;
+    font-size: 10px;
+    font-weight: 900;
+    letter-spacing: 1px;
+    padding: 3px 8px;
+    border-radius: 50px;
+    text-transform: uppercase;
+    z-index: 2;
+  }
+
+  .badge.hot { background: #ff4500; }
+  .badge.new { background: var(--green); color: #000; }
+  .badge.top { background: var(--accent2); color: #000; }
+
+  .card-info {
+    padding: 14px;
+  }
+
+  .card-title {
+    font-weight: 900;
+    font-size: 15px;
+    line-height: 1.2;
+    color: #fff;
+    margin-bottom: 4px;
+  }
+
+  .card-meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 12px;
+    color: var(--sub);
+    font-weight: 700;
+  }
+
+  .card-cat {
+    background: rgba(255,255,255,0.07);
+    padding: 2px 8px;
+    border-radius: 50px;
+  }
+
+  .card-rating {
+    color: var(--accent2);
+  }
+
+  .play-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0,0,0,0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.25s;
+    z-index: 5;
+    border-radius: 18px;
+  }
+
+  .play-btn {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    background: var(--accent1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 28px;
+    box-shadow: 0 0 30px var(--accent1);
+    transform: scale(0.8);
+    transition: transform 0.2s;
+  }
+
+  .game-card:hover .play-overlay { opacity: 1; }
+  .game-card:hover .play-btn { transform: scale(1); }
+
+  /* SECTION HEADER */
+  .section-header {
+    position: relative;
+    z-index: 10;
+    padding: 8px 40px 20px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .section-title {
+    font-family: 'Bangers', cursive;
+    font-size: 32px;
+    letter-spacing: 3px;
+    color: var(--accent3);
+  }
+
+  .section-line {
+    flex: 1;
+    height: 2px;
+    background: linear-gradient(90deg, rgba(0,245,255,0.3), transparent);
+    border-radius: 2px;
+  }
+
+  /* FOOTER */
+  footer {
+    position: relative;
+    z-index: 10;
+    text-align: center;
+    padding: 30px;
+    border-top: 1px solid rgba(255,255,255,0.05);
+    color: var(--sub);
+    font-size: 14px;
+  }
+
+  footer strong { color: var(--accent1); }
+
+  /* No results */
+  .no-results {
+    position: relative;
+    z-index: 10;
+    text-align: center;
+    padding: 80px 20px;
+    font-family: 'Bangers', cursive;
+    font-size: 40px;
+    color: var(--sub);
+    letter-spacing: 3px;
+    display: none;
+  }
+
+  @media (max-width: 600px) {
+    .games-grid { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 14px; padding: 0 14px 60px; }
+    .controls { padding: 16px 14px; }
+    .section-header { padding: 8px 14px 16px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">MEGA ARCADE</div>
+  <span class="logo-sub">50 Free Games — Play Now!</span>
+  <br>
+  <span class="coin-count">🪙 50 Games Loaded — No Download Needed!</span>
+</header>
+
+<div class="controls">
+  <div class="search-box">
+    <span class="search-icon">🔍</span>
+    <input type="text" id="searchInput" placeholder="Search games..." oninput="filterGames()">
+  </div>
+  <div class="filter-btns" id="filterBtns">
+    <button class="filter-btn active" onclick="setFilter('all', this)">🎮 All</button>
+    <button class="filter-btn" onclick="setFilter('runner', this)">🏃 Runner</button>
+    <button class="filter-btn" onclick="setFilter('racing', this)">🏎️ Racing</button>
+    <button class="filter-btn" onclick="setFilter('puzzle', this)">🧩 Puzzle</button>
+    <button class="filter-btn" onclick="setFilter('shooting', this)">🔫 Shooting</button>
+    <button class="filter-btn" onclick="setFilter('adventure', this)">⚔️ Adventure</button>
+    <button class="filter-btn" onclick="setFilter('arcade', this)">👾 Arcade</button>
+    <button class="filter-btn" onclick="setFilter('sports', this)">⚽ Sports</button>
+    <button class="filter-btn" onclick="setFilter('strategy', this)">🧠 Strategy</button>
+  </div>
+</div>
+
+<div class="game-count-banner">Showing <span id="countDisplay">50</span> awesome games!</div>
+
+<div class="no-results" id="noResults">😢 No games found! Try another search.</div>
+
+<div class="games-grid" id="gamesGrid"></div>
+
+<footer>
+  <strong>MEGA ARCADE</strong> — 50 Free Games • Click any game to play instantly • No sign-up required
+  <br><br>
+  <span style="font-size:15px;">© 2026 <strong style="color:var(--accent2);">Bhavishya Gupta</strong>. All Rights Reserved.</span>
+  <br>
+  <span style="font-size:13px; color:#7777aa; margin-top:6px; display:inline-block;">
+    📧 Contact: <a href="mailto:bhavishyagupta8168@gmail.com" style="color:var(--accent3); text-decoration:none; font-weight:700;">bhavishyagupta8168@gmail.com</a>
+  </span>
+</footer>
+
+<script>
+const games = [
+  // RUNNERS
+  { title: "Subway Surfers", cat: "runner", emoji: "🛹", bg: "#1a3a6e", glow: "rgba(0,120,255,0.4)", border: "rgba(0,120,255,0.6)", badge: "hot", rating: "⭐4.9", url: "https://poki.com/en/g/subway-surfers", desc: "Dash through the city!" },
+  { title: "Temple Run 2", cat: "runner", emoji: "🏛️", bg: "#4a1c00", glow: "rgba(255,100,0,0.4)", border: "rgba(255,100,0,0.6)", badge: "top", rating: "⭐4.8", url: "https://poki.com/en/g/temple-run-2", desc: "Run from the monster!" },
+  { title: "Minion Rush", cat: "runner", emoji: "💛", bg: "#ffd700", glow: "rgba(255,215,0,0.4)", border: "rgba(255,215,0,0.6)", badge: "", rating: "⭐4.7", url: "https://poki.com/en/g/despicable-me-minion-rush", desc: "Run as a minion!" },
+  { title: "Slope", cat: "runner", emoji: "🟢", bg: "#003300", glow: "rgba(0,255,0,0.4)", border: "rgba(0,255,0,0.6)", badge: "hot", rating: "⭐4.8", url: "https://slope-game.com/", desc: "Roll down the neon slope!" },
+  { title: "Run 3", cat: "runner", emoji: "🚀", bg: "#111133", glow: "rgba(100,100,255,0.4)", border: "rgba(100,100,255,0.6)", badge: "", rating: "⭐4.7", url: "https://poki.com/en/g/run-3", desc: "Run through space tunnels!" },
+  { title: "Geometry Dash", cat: "runner", emoji: "🔷", bg: "#0033ff", glow: "rgba(0,100,255,0.4)", border: "rgba(0,100,255,0.6)", badge: "top", rating: "⭐4.9", url: "https://geometrydash.io/", desc: "Jump to the rhythm!" },
+  { title: "Stack Ball", cat: "runner", emoji: "🌀", bg: "#2d0040", glow: "rgba(180,0,255,0.4)", border: "rgba(180,0,255,0.6)", badge: "new", rating: "⭐4.6", url: "https://poki.com/en/g/stack-ball", desc: "Smash through platforms!" },
+  { title: "Helix Jump", cat: "runner", emoji: "🌈", bg: "#001a2c", glow: "rgba(0,200,255,0.4)", border: "rgba(0,200,255,0.6)", badge: "", rating: "⭐4.6", url: "https://poki.com/en/g/helix-jump", desc: "Bounce the ball down!" },
+
+  // RACING
+  { title: "Hill Climb Racing", cat: "racing", emoji: "🚗", bg: "#2a4a00", glow: "rgba(100,200,0,0.4)", border: "rgba(100,200,0,0.6)", badge: "hot", rating: "⭐4.8", url: "https://poki.com/en/g/hill-climb-racing", desc: "Race up crazy hills!" },
+  { title: "Moto X3M", cat: "racing", emoji: "🏍️", bg: "#3a0000", glow: "rgba(255,50,0,0.4)", border: "rgba(255,50,0,0.6)", badge: "top", rating: "⭐4.9", url: "https://poki.com/en/g/moto-x3m", desc: "Stunt motorcycle madness!" },
+  { title: "Road Rush Cars", cat: "racing", emoji: "🏁", bg: "#1a1a1a", glow: "rgba(255,255,0,0.4)", border: "rgba(255,255,0,0.6)", badge: "", rating: "⭐4.5", url: "https://poki.com/en/g/road-rush-cars", desc: "Dodge traffic!" },
+  { title: "Rally Point 6", cat: "racing", emoji: "🏎️", bg: "#0a2a0a", glow: "rgba(0,255,100,0.4)", border: "rgba(0,255,100,0.6)", badge: "", rating: "⭐4.5", url: "https://poki.com/en/g/rally-point-6", desc: "Epic rally races!" },
+  { title: "Burnout Drift", cat: "racing", emoji: "💨", bg: "#1a0033", glow: "rgba(150,0,255,0.4)", border: "rgba(150,0,255,0.6)", badge: "new", rating: "⭐4.6", url: "https://poki.com/en/g/burnout-drift", desc: "Drift like a pro!" },
+  { title: "City Car Stunt 4", cat: "racing", emoji: "🌆", bg: "#001133", glow: "rgba(0,150,255,0.4)", border: "rgba(0,150,255,0.6)", badge: "", rating: "⭐4.7", url: "https://poki.com/en/g/city-car-stunt-4", desc: "Stunt in the city!" },
+  { title: "Death Race", cat: "racing", emoji: "💀", bg: "#200000", glow: "rgba(255,0,0,0.4)", border: "rgba(255,0,0,0.6)", badge: "hot", rating: "⭐4.7", url: "https://poki.com/en/g/death-race", desc: "Survive the deadly race!" },
+
+  // PUZZLE
+  { title: "2048", cat: "puzzle", emoji: "🔢", bg: "#3a2a00", glow: "rgba(255,180,0,0.4)", border: "rgba(255,180,0,0.6)", badge: "top", rating: "⭐4.8", url: "https://play2048.co/", desc: "Merge tiles to 2048!" },
+  { title: "Tetris", cat: "puzzle", emoji: "🧱", bg: "#001a3a", glow: "rgba(0,100,255,0.4)", border: "rgba(0,100,255,0.6)", badge: "top", rating: "⭐4.9", url: "https://jstris.jezevec10.com/", desc: "The classic block game!" },
+  { title: "Cut the Rope", cat: "puzzle", emoji: "🍬", bg: "#003a00", glow: "rgba(0,200,0,0.4)", border: "rgba(0,200,0,0.6)", badge: "", rating: "⭐4.7", url: "https://www.cuttherope.net/", desc: "Feed the candy monster!" },
+  { title: "Mahjong Classic", cat: "puzzle", emoji: "🀄", bg: "#2a0000", glow: "rgba(200,0,0,0.4)", border: "rgba(200,0,0,0.6)", badge: "", rating: "⭐4.6", url: "https://poki.com/en/g/mahjong-classic", desc: "Match the tiles!" },
+  { title: "Candy Crush", cat: "puzzle", emoji: "🍭", bg: "#3a003a", glow: "rgba(255,0,255,0.4)", border: "rgba(255,0,255,0.6)", badge: "hot", rating: "⭐4.8", url: "https://www.king.com/game/candycrush", desc: "Sweet puzzle fun!" },
+  { title: "Sudoku", cat: "puzzle", emoji: "🔢", bg: "#002a2a", glow: "rgba(0,200,200,0.4)", border: "rgba(0,200,200,0.6)", badge: "", rating: "⭐4.7", url: "https://sudoku.com/", desc: "Brain training classic!" },
+  { title: "Word Search", cat: "puzzle", emoji: "🔤", bg: "#1a2a00", glow: "rgba(150,255,0,0.4)", border: "rgba(150,255,0,0.6)", badge: "", rating: "⭐4.5", url: "https://poki.com/en/g/daily-word-search", desc: "Find hidden words!" },
+  { title: "Bubble Shooter", cat: "puzzle", emoji: "🫧", bg: "#001a3a", glow: "rgba(0,150,255,0.4)", border: "rgba(0,150,255,0.6)", badge: "hot", rating: "⭐4.7", url: "https://poki.com/en/g/bubble-shooter", desc: "Pop the bubbles!" },
+
+  // SHOOTING
+  { title: "Shell Shockers", cat: "shooting", emoji: "🥚", bg: "#2a1a00", glow: "rgba(255,150,0,0.4)", border: "rgba(255,150,0,0.6)", badge: "hot", rating: "⭐4.8", url: "https://shellshock.io/", desc: "Egg multiplayer shooter!" },
+  { title: "1v1.lol", cat: "shooting", emoji: "🔫", bg: "#001a00", glow: "rgba(0,255,0,0.4)", border: "rgba(0,255,0,0.6)", badge: "top", rating: "⭐4.9", url: "https://1v1.lol/", desc: "Battle royale builder!" },
+  { title: "Zombs Royale", cat: "shooting", emoji: "🧟", bg: "#0a1a00", glow: "rgba(100,255,0,0.4)", border: "rgba(100,255,0,0.6)", badge: "", rating: "⭐4.7", url: "https://zombsroyale.io/", desc: "Zombie battle royale!" },
+  { title: "Krunker.io", cat: "shooting", emoji: "🎯", bg: "#1a0000", glow: "rgba(255,50,0,0.4)", border: "rgba(255,50,0,0.6)", badge: "hot", rating: "⭐4.8", url: "https://krunker.io/", desc: "Fast-paced FPS!" },
+  { title: "Bullet Force", cat: "shooting", emoji: "💥", bg: "#2a2a00", glow: "rgba(255,200,0,0.4)", border: "rgba(255,200,0,0.6)", badge: "new", rating: "⭐4.7", url: "https://poki.com/en/g/bullet-force-multiplayer", desc: "Intense multiplayer FPS!" },
+  { title: "Space Shooter", cat: "shooting", emoji: "🚀", bg: "#00001a", glow: "rgba(0,100,255,0.4)", border: "rgba(0,100,255,0.6)", badge: "", rating: "⭐4.5", url: "https://poki.com/en/g/space-shooter", desc: "Defend the galaxy!" },
+  { title: "Agar.io", cat: "arcade", emoji: "⭕", bg: "#001a1a", glow: "rgba(0,255,200,0.4)", border: "rgba(0,255,200,0.6)", badge: "top", rating: "⭐4.8", url: "https://agar.io/", desc: "Eat cells to grow!" },
+
+  // ADVENTURE
+  { title: "Minecraft Classic", cat: "adventure", emoji: "⛏️", bg: "#1a3300", glow: "rgba(100,200,0,0.4)", border: "rgba(100,200,0,0.6)", badge: "top", rating: "⭐4.9", url: "https://classic.minecraft.net/", desc: "Build and explore!" },
+  { title: "Fireboy & Watergirl", cat: "adventure", emoji: "🔥", bg: "#2a0a00", glow: "rgba(255,100,0,0.4)", border: "rgba(255,100,0,0.6)", badge: "hot", rating: "⭐4.8", url: "https://poki.com/en/g/fireboy-and-watergirl-the-forest-temple", desc: "Epic duo adventure!" },
+  { title: "Vex 5", cat: "adventure", emoji: "🤸", bg: "#00001a", glow: "rgba(100,100,255,0.4)", border: "rgba(100,100,255,0.6)", badge: "", rating: "⭐4.7", url: "https://poki.com/en/g/vex-5", desc: "Parkour challenge!" },
+  { title: "Dungeon Quest", cat: "adventure", emoji: "⚔️", bg: "#1a0022", glow: "rgba(150,0,200,0.4)", border: "rgba(150,0,200,0.6)", badge: "new", rating: "⭐4.6", url: "https://poki.com/en/g/dungeon-quest", desc: "Slay the dungeon!" },
+  { title: "Stickman Hook", cat: "adventure", emoji: "🕷️", bg: "#001122", glow: "rgba(0,150,255,0.4)", border: "rgba(0,150,255,0.6)", badge: "hot", rating: "⭐4.7", url: "https://poki.com/en/g/stickman-hook", desc: "Swing like Spider-Man!" },
+  { title: "The Lost City", cat: "adventure", emoji: "🏙️", bg: "#0a1a2a", glow: "rgba(0,200,255,0.4)", border: "rgba(0,200,255,0.6)", badge: "", rating: "⭐4.5", url: "https://poki.com/en/g/the-lost-city", desc: "Explore mystery ruins!" },
+
+  // ARCADE
+  { title: "Snake io", cat: "arcade", emoji: "🐍", bg: "#001a00", glow: "rgba(0,255,0,0.4)", border: "rgba(0,255,0,0.6)", badge: "top", rating: "⭐4.7", url: "https://slither.io/", desc: "Classic snake online!" },
+  { title: "Pac-Man", cat: "arcade", emoji: "👻", bg: "#1a1a00", glow: "rgba(255,255,0,0.4)", border: "rgba(255,255,0,0.6)", badge: "top", rating: "⭐4.9", url: "https://www.google.com/logos/2010/pacman10-i.html", desc: "Eat dots, avoid ghosts!" },
+  { title: "Breakout", cat: "arcade", emoji: "🧱", bg: "#001a1a", glow: "rgba(0,255,255,0.4)", border: "rgba(0,255,255,0.6)", badge: "", rating: "⭐4.6", url: "https://poki.com/en/g/brick-breaker", desc: "Break all the bricks!" },
+  { title: "Whack-a-Mole", cat: "arcade", emoji: "🐹", bg: "#1a0a00", glow: "rgba(200,100,0,0.4)", border: "rgba(200,100,0,0.6)", badge: "", rating: "⭐4.5", url: "https://poki.com/en/g/whack-a-mole", desc: "Bop the moles fast!" },
+  { title: "Flappy Bird", cat: "arcade", emoji: "🐦", bg: "#002a3a", glow: "rgba(0,180,255,0.4)", border: "rgba(0,180,255,0.6)", badge: "hot", rating: "⭐4.7", url: "https://flappybird.io/", desc: "The legendary tap game!" },
+  { title: "Doodle Jump", cat: "arcade", emoji: "🟢", bg: "#0a2a0a", glow: "rgba(0,200,0,0.4)", border: "rgba(0,200,0,0.6)", badge: "", rating: "⭐4.6", url: "https://poki.com/en/g/doodle-jump", desc: "Jump up forever!" },
+  { title: "Among Us Online", cat: "arcade", emoji: "👨‍🚀", bg: "#0a001a", glow: "rgba(150,0,255,0.4)", border: "rgba(150,0,255,0.6)", badge: "hot", rating: "⭐4.8", url: "https://www.innersloth.com/games/among-us/", desc: "Find the impostor!" },
+
+  // SPORTS
+  { title: "Head Soccer", cat: "sports", emoji: "⚽", bg: "#003a00", glow: "rgba(0,200,0,0.4)", border: "rgba(0,200,0,0.6)", badge: "hot", rating: "⭐4.7", url: "https://poki.com/en/g/head-soccer", desc: "1v1 soccer action!" },
+  { title: "Basketball Stars", cat: "sports", emoji: "🏀", bg: "#2a1a00", glow: "rgba(255,130,0,0.4)", border: "rgba(255,130,0,0.6)", badge: "top", rating: "⭐4.8", url: "https://poki.com/en/g/basketball-stars", desc: "Street basketball!" },
+  { title: "Football Masters", cat: "sports", emoji: "🏈", bg: "#1a2a00", glow: "rgba(150,200,0,0.4)", border: "rgba(150,200,0,0.6)", badge: "", rating: "⭐4.6", url: "https://poki.com/en/g/football-masters", desc: "American football!" },
+  { title: "Tennis Open 2024", cat: "sports", emoji: "🎾", bg: "#003a2a", glow: "rgba(0,200,150,0.4)", border: "rgba(0,200,150,0.6)", badge: "new", rating: "⭐4.6", url: "https://poki.com/en/g/tennis-open-2024", desc: "Rally to victory!" },
+  { title: "Snow Rider 3D", cat: "sports", emoji: "⛷️", bg: "#001a2a", glow: "rgba(0,150,255,0.4)", border: "rgba(0,150,255,0.6)", badge: "hot", rating: "⭐4.7", url: "https://poki.com/en/g/snow-rider-3d", desc: "Shred the slopes!" },
+  { title: "Golf Battle", cat: "sports", emoji: "⛳", bg: "#003a00", glow: "rgba(0,255,0,0.4)", border: "rgba(0,255,0,0.6)", badge: "", rating: "⭐4.5", url: "https://poki.com/en/g/golf-battle", desc: "Mini golf duel!" },
+
+  // STRATEGY
+  { title: "Bloons TD 6", cat: "strategy", emoji: "🎈", bg: "#1a0000", glow: "rgba(255,80,0,0.4)", border: "rgba(255,80,0,0.6)", badge: "top", rating: "⭐4.9", url: "https://poki.com/en/g/bloons-tower-defense-5", desc: "Pop the bloons!" },
+  { title: "Kingdom Rush", cat: "strategy", emoji: "🏰", bg: "#2a1a00", glow: "rgba(200,150,0,0.4)", border: "rgba(200,150,0,0.6)", badge: "hot", rating: "⭐4.8", url: "https://www.kongregate.com/games/Ironhidegames/kingdom-rush", desc: "Defend your kingdom!" },
+  { title: "Clash of Clans", cat: "strategy", emoji: "⚔️", bg: "#001a00", glow: "rgba(0,180,0,0.4)", border: "rgba(0,180,0,0.6)", badge: "top", rating: "⭐4.9", url: "https://clashofclans.com/", desc: "Build & battle clans!" },
+  { title: "Wordle", cat: "puzzle", emoji: "🟩", bg: "#003300", glow: "rgba(0,200,0,0.4)", border: "rgba(0,200,0,0.6)", badge: "hot", rating: "⭐4.8", url: "https://www.nytimes.com/games/wordle/index.html", desc: "Guess the 5-letter word!" },
+  { title: "Chess", cat: "strategy", emoji: "♟️", bg: "#0a0a0a", glow: "rgba(200,200,200,0.3)", border: "rgba(200,200,200,0.5)", badge: "", rating: "⭐4.9", url: "https://www.chess.com/play/online", desc: "The ultimate strategy!" },
+];
+
+let currentFilter = 'all';
+
+function renderGames(list) {
+  const grid = document.getElementById('gamesGrid');
+  const noResults = document.getElementById('noResults');
+  const countDisplay = document.getElementById('countDisplay');
+
+  if (list.length === 0) {
+    grid.innerHTML = '';
+    noResults.style.display = 'block';
+    countDisplay.textContent = '0';
+    return;
+  }
+
+  noResults.style.display = 'none';
+  countDisplay.textContent = list.length;
+
+  grid.innerHTML = list.map((g, i) => `
+    <a class="game-card" href="${g.url}" target="_blank" rel="noopener"
+       style="
+         --card-glow: ${g.glow};
+         --card-border: ${g.border};
+         animation-delay: ${(i % 20) * 0.04}s;
+       ">
+      <div class="card-thumb" style="background: ${g.bg};">
+        <span style="position:relative;z-index:1;">${g.emoji}</span>
+        ${g.badge ? `<span class="badge ${g.badge === '🔥 HOT' ? 'hot' : g.badge === 'new' ? 'new' : g.badge === 'top' ? 'top' : 'hot'}">${g.badge === 'hot' ? '🔥 HOT' : g.badge === 'new' ? '✨ NEW' : '🏆 TOP'}</span>` : ''}
+      </div>
+      <div class="play-overlay"><div class="play-btn">▶</div></div>
+      <div class="card-info">
+        <div class="card-title">${g.title}</div>
+        <div class="card-meta">
+          <span class="card-cat">${g.cat}</span>
+          <span class="card-rating">${g.rating}</span>
+        </div>
+      </div>
+    </a>
+  `).join('');
+}
+
+function filterGames() {
+  const q = document.getElementById('searchInput').value.toLowerCase();
+  const filtered = games.filter(g => {
+    const matchCat = currentFilter === 'all' || g.cat === currentFilter;
+    const matchQ = !q || g.title.toLowerCase().includes(q) || g.cat.toLowerCase().includes(q);
+    return matchCat && matchQ;
+  });
+  renderGames(filtered);
+}
+
+function setFilter(cat, btn) {
+  currentFilter = cat;
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  filterGames();
+}
+
+// Initial render
+renderGames(games);
+</script>
+
+</body>
+</html>
